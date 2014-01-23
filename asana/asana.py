@@ -372,7 +372,7 @@ class AsanaAPI(object):
         payload['file'] = open(file_url, 'rb')
         return self._asana_post('tasks/%d/attachments' % task_id, payload, files=True)
 
-    def list_attachment(self, task_id):
+    def list_attachments(self, task_id):
         """Get files attached to a task
 
         :param taks_id: Targeted task
