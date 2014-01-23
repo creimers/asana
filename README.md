@@ -8,6 +8,7 @@ This project is a work in progress. Here's what's currently available:
 - add_project_task
 - add_story
 - add_tag_task
+- attach_file_to_task
 - create_project
 - create_tag
 - create_task
@@ -20,9 +21,11 @@ This project is a work in progress. Here's what's currently available:
 - get_subtasks
 - get_tag_tasks
 - rm_tag_task
+- get_attachment
 - get_task_tags
 - get_tags
 - get_task
+- list_attachments
 - list_projects
 - list_stories
 - list_tasks
