@@ -96,11 +96,12 @@ class AsanaAPI(object):
             if (self.handle_exception(r) > 0):
                 self._asana(api_target)
 
-    def _asana_post(self, api_target, data):
+    def _asana_post(self, api_target, data, files=False):
         """Peform a POST request
 
         :param api_target: API URI path for request
         :param data: POST payload
+        :param file: Boolean switch to select the a different post in case of a file upload
         """
         target = "/".join([self.aurl, api_target])
         pdb.set_trace()
@@ -108,8 +109,10 @@ class AsanaAPI(object):
             print "-> Posting to: %s" % target
             print "-> Post payload:"
             pprint(data)
-        r = requests.post(target, auth=(self.apikey, ""), data=data)
-        pdb.set_trace()
+        if files:
+            r = requests.post(target, auth=(self.apikey, ""), files=data)
+        else:
+            r = requests.post(target, auth=(self.apikey, ""), data=data)
         if self._ok_status(r.status_code) and r.status_code is not 404:
             if r.headers['content-type'].split(';')[0] == 'application/json':
                 return json.loads(r.text)['data']
@@ -367,13 +370,21 @@ class AsanaAPI(object):
     def attach_file_to_task(self, task_id, file_url):
         """Attaches a file to an existing task.
 
+<<<<<<< HEAD
         :param task: task to attach to
+=======
+        :param task_id: task to attach to
+>>>>>>> add_attachment
         :param file: URL of the file to be attached
         """
         payload = {}
         payload['file'] = open(file_url, 'rb')
         # file['file'] = file_url
+<<<<<<< HEAD
         return self._asana_post('tasks/%d/attachments' % task_id, payload)
+=======
+        return self._asana_post('tasks/%d/attachments' % task_id, payload, files=True)
+>>>>>>> add_attachment
 
     def list_attachment(self, task_id):
         """Get files attached to a task
