@@ -98,7 +98,7 @@ class AsanaAPI(object):
 
         :param api_target: API URI path for request
         :param data: POST payload
-        :param files: Boolean switch to select the a different post in case of a file upload
+        :param files: Boolean switch to select a different post in case of a file upload
         """
         target = "/".join([self.aurl, api_target])
         if self.debug:
