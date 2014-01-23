@@ -2,7 +2,6 @@
 
 import requests
 import time
-import pdb
 
 try:
     from urllib.parse import quote
@@ -79,9 +78,7 @@ class AsanaAPI(object):
         target = "/".join([self.aurl, quote(api_target, safe="/&=?")])
         if self.debug:
             print "-> Calling: %s" % target
-        pdb.set_trace()
         r = requests.get(target, auth=(self.apikey, ""))
-        pdb.set_trace()
         if self._ok_status(r.status_code) and r.status_code is not 404:
             if r.headers['content-type'].split(';')[0] == 'application/json':
                 if hasattr(r, 'text'):
@@ -104,7 +101,6 @@ class AsanaAPI(object):
         :param file: Boolean switch to select the a different post in case of a file upload
         """
         target = "/".join([self.aurl, api_target])
-        pdb.set_trace()
         if self.debug:
             print "-> Posting to: %s" % target
             print "-> Post payload:"
