@@ -2,6 +2,7 @@
 
 import requests
 import time
+import pdb
 
 try:
     from urllib.parse import quote
@@ -78,7 +79,9 @@ class AsanaAPI(object):
         target = "/".join([self.aurl, quote(api_target, safe="/&=?")])
         if self.debug:
             print "-> Calling: %s" % target
+        pdb.set_trace()
         r = requests.get(target, auth=(self.apikey, ""))
+        pdb.set_trace()
         if self._ok_status(r.status_code) and r.status_code is not 404:
             if r.headers['content-type'].split(';')[0] == 'application/json':
                 if hasattr(r, 'text'):
@@ -100,11 +103,13 @@ class AsanaAPI(object):
         :param data: POST payload
         """
         target = "/".join([self.aurl, api_target])
+        pdb.set_trace()
         if self.debug:
             print "-> Posting to: %s" % target
             print "-> Post payload:"
             pprint(data)
         r = requests.post(target, auth=(self.apikey, ""), data=data)
+        pdb.set_trace()
         if self._ok_status(r.status_code) and r.status_code is not 404:
             if r.headers['content-type'].split(';')[0] == 'application/json':
                 return json.loads(r.text)['data']
@@ -359,6 +364,31 @@ class AsanaAPI(object):
                 raise Exception('Bad task due date: %s' % due_on)
         return self._asana_post('tasks/%s/subtasks' % parent_id, payload)
 
+    def attach_file_to_task(self, task_id, file_url):
+        """Attaches a file to an existing task.
+
+        :param task: task to attach to
+        :param file: URL of the file to be attached
+        """
+        payload = {}
+        payload['file'] = open(file_url, 'rb')
+        # file['file'] = file_url
+        return self._asana_post('tasks/%d/attachments' % task_id, payload)
+
+    def list_attachment(self, task_id):
+        """Get files attached to a task
+
+        :param taks_id: Targeted task
+        """
+        return self._asana('tasks/%d/attachments' % task_id)
+
+    def get_attachment(self, attachement_id):
+        """Teturns the full record for a single attachment
+
+        :param attachemt_id: Targeted attachement
+        """
+        return self._asana('attachments/%d' % attachement_id)
+
     def create_project(self, name, workspace, notes=None, archived=False):
         """Create a new project
 
@@ -474,3 +504,20 @@ class AsanaAPI(object):
         payload = {'name': tag, 'workspace': workspace}
 
         return self._asana_post('tags', payload)
+
+if __name__ == '__main__':
+    asana = AsanaAPI('f83V8fK.6IKPfmcGJW8LZfoVRoA2CSIF', debug=True)
+    workspace = 859392075242
+    # users = asana.list_users(workspace)
+    # christoph = users[1]['id']
+    # print asana.list_tasks(workspace, christoph)
+    task = 9760925795644
+    # print asana.list_attachment(task)
+    # print asana.get_attachment(9760925795646)
+    # asana.create_task('just a test great test!', workspace, christoph)
+    # asana.attach_file_to_task(task, '/Users/Christoph/Projekte/upload.txt')
+    target = 'https://app.asana.com/api/1.0/tasks/9760925795644/attachments'
+    # target = 'http://httpbin.org/post'
+    data = {'file': open('/Users/Christoph/Projekte/upload.txt', 'rb')}
+    r = requests.post(target, auth=(asana.apikey, ""), data=data)
+    print r.text
