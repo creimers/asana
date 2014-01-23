@@ -98,7 +98,7 @@ class AsanaAPI(object):
 
         :param api_target: API URI path for request
         :param data: POST payload
-        :param file: Boolean switch to select the a different post in case of a file upload
+        :param files: Boolean switch to select the a different post in case of a file upload
         """
         target = "/".join([self.aurl, api_target])
         if self.debug:
@@ -364,7 +364,7 @@ class AsanaAPI(object):
         return self._asana_post('tasks/%s/subtasks' % parent_id, payload)
 
     def attach_file_to_task(self, task_id, file_url):
-        """Attaches a file to an existing task.
+        """Attaches a file to an existing task
 
         :param task: task to attach to
         :param task_id: task to attach to
