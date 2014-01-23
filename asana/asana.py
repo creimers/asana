@@ -369,10 +369,8 @@ class AsanaAPI(object):
 
     def attach_file_to_task(self, task_id, file_url):
         """Attaches a file to an existing task.
-
         :param task: task to attach to
         :param task_id: task to attach to
-        :param file: URL of the file to be attached
         """
         payload = {}
         payload['file'] = open(file_url, 'rb')
