@@ -139,6 +139,24 @@ class AsanaAPI(object):
             if (self.handle_exception(r) > 0):
                 self._asana_put(api_target, data)
 
+    def _asana_delete(self, api_target):
+        """Peform a DELETE request
+
+        :param api_target: API URI path for request
+        """
+        target = "/".join([self.aurl, api_target])
+        if self.debug:
+            print "-> DELETEing to: %s" % target
+        r = requests.delete(target, auth=(self.apikey, ""))
+        if self._ok_status(r.status_code) and r.status_code is not 404:
+            if r.headers['content-type'].split(';')[0] == 'application/json':
+                return json.loads(r.text)['data']
+            else:
+                raise Exception('Did not receive json from api: %s' % str(r))
+        else:
+            if (self.handle_exception(r) > 0):
+                self._asana_delete(api_target)
+
     @classmethod
     def _ok_status(cls, status_code):
         """Check whether status_code is a ok status i.e. 2xx or 404"""
@@ -317,6 +335,14 @@ class AsanaAPI(object):
 
         return self._asana_put('tasks/%s' % task, payload)
 
+    def delete_task(self, task_id):
+        """
+        Delete an existing task
+
+        :param task_id: task to delete
+        """
+        return self._asana_delete('tasks/%s' % task_id)
+
     def add_parent(self, task_id, parent_id):
         """Set the parent for an existing task.
 
@@ -419,6 +445,14 @@ class AsanaAPI(object):
         if archived:
             payload['archived'] = 'true'
         return self._asana_put('projects/%s' % project_id, payload)
+
+    def delete_project(self, project_id):
+        """
+        Delete an existing project
+
+        :param project_id: project to delete
+        """
+        return self._asana_delete('projects/%s' % project_id)
 
     def update_workspace(self, workspace_id, name):
         """Update workspace

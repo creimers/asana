@@ -5,6 +5,7 @@ python wrapper for the [Asana API](http://asana.com)
 Documentation is available at: [AsanaAPI](http://asana.readthedocs.org/en/latest/index.html)
 This project is a work in progress. Here's what's currently available:
 
+- add_parent
 - add_project_task
 - add_story
 - add_tag_task
@@ -12,8 +13,9 @@ This project is a work in progress. Here's what's currently available:
 - create_project
 - create_tag
 - create_task
-- add_parent
 - create_subtask
+- delete_task
+- delete_project
 - get_basic_auth
 - get_project
 - get_project_tasks
